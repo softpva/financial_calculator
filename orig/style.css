@@ -1,11 +1,12 @@
 .output {
     font-weight:bold;
-  }
-  #payment {
-    text-decoration:underline;
+    color: #03f;
   }
   #graph {
     border:solid black 1px;
+    background-color: #ddd;
+    height: 500px;
+    width: 400px;
   }
   th, td {
     vertical-align: top;

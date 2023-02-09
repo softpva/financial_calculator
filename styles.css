@@ -1,0 +1,71 @@
+*, *::before, *::after{
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: normal;
+}
+
+body{
+    padding: auto;
+    margin: auto;
+    background: linear-gradient(to right, #007799, #0000FF);
+}
+
+.grid .mr{
+    font-size: 1.5rem;
+    /* font-weight: bold; */
+}
+
+.grid .mr .mem{
+    font-size: 1rem;
+    vertical-align: bottom;
+    font-weight: bold;
+}
+
+
+.grid{
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    /* align-items: center; */
+    min-height: 100vh;
+    grid-template-columns: repeat(4, 100px);
+    grid-template-rows: minmax(100px, auto) repeat(6, 80px);
+}
+
+.grid > button{
+    cursor: pointer;
+    font-size: 1.5rem;
+    border: 1px solid #FFFFFF;
+    outline: none;
+    background-color: rgba(255,255,255,.7);    
+    transition-duration: 0.2s;
+}
+
+.grid > button:hover{
+    background-color: rgba(255,255,255,.9);    
+}
+
+.grid #equal{
+    font-weight: bold;
+}
+
+.top {
+    grid-column: 1 / -1;
+    background-color: rgba(0,15,15,.7);
+    color: #FFFFFF;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    flex-direction: column;
+    padding-inline-end: 10px;
+    padding: 5px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.top .top-expression {
+    font-size: 1rem;
+}
+.top .top-current {
+    font-size: 1.5rem;
+}
