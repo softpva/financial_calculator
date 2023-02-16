@@ -7,20 +7,8 @@
 body{
     padding: auto;
     margin: auto;
-    background: linear-gradient(to right, #007799, #0000FF);
+    background: linear-gradient(to right, #007700, #00FF00);
 }
-
-.grid .mr{
-    font-size: 1.5rem;
-    /* font-weight: bold; */
-}
-
-.grid .mr .mem{
-    font-size: 1rem;
-    vertical-align: bottom;
-    font-weight: bold;
-}
-
 
 .grid{
     display: grid;
@@ -28,8 +16,8 @@ body{
     align-content: center;
     /* align-items: center; */
     min-height: 100vh;
-    grid-template-columns: repeat(4, 100px);
-    grid-template-rows: minmax(100px, auto) repeat(6, 80px);
+    grid-template-columns: repeat(6, 100px);
+    grid-template-rows: minmax(80px, auto) minmax(80px, auto) repeat(4, 80px);
 }
 
 .grid > button{
@@ -37,21 +25,49 @@ body{
     font-size: 1.5rem;
     border: 1px solid #FFFFFF;
     outline: none;
-    background-color: rgba(255,255,255,.7);    
+    background-color: rgba(255,255,255,.6);    
     transition-duration: 0.2s;
 }
 
 .grid > button:hover{
-    background-color: rgba(255,255,255,.9);    
+    background-color: rgba(255,255,255,.8);    
 }
 
 .grid #equal{
     font-weight: bold;
 }
 
+.topleft {
+    grid-column: 1 / 4;
+    background-color: rgba(0,0,0,.8);
+    color: #FFFFFF;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    flex-direction: column;
+    padding-inline-end: 10px;
+    padding: 5px;
+    word-wrap: break-word;
+    word-break: break-all;    
+}
+
+.topright {
+    grid-column: 4 / -1;
+    background-color: rgba(0,0,0,.8);
+    color: #FFFFFF;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    flex-direction: column;
+    padding-inline-end: 10px;
+    padding: 5px;
+    word-wrap: break-word;
+    word-break: break-all;    
+}
+
 .top {
     grid-column: 1 / -1;
-    background-color: rgba(0,15,15,.7);
+    background-color: rgba(0,0,0,.8);
     color: #FFFFFF;
     display: flex;
     align-items: flex-end;
@@ -68,4 +84,9 @@ body{
 }
 .top .top-current {
     font-size: 1.5rem;
+}
+.top .top-financ {
+    display:flex;
+    flex-direction: row;
+    align-items: flex-start;
 }
