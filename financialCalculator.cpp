@@ -10,42 +10,11 @@
 #include <iomanip>
 #include <cmath>
 #include <string>
-// #include "financialCalculator.h"
+#include "financialCalculator.h"
 
 using namespace std;
 
-class financialCalculator
-{
-    private:
-        double presentValue;
-        double futureValue;
-        double interestRate;
-        int numberOfMonths;
-        double monthlyPayment;
-        double totalAmountPaid;
-    public:
-        financialCalculator(); // constructor
-        void setPresentValue(double);
-        void setFutureValue(double);
-        void setInterestRate(double);
-        void setNumberOfMonths(int);
-        void setMonthlyPayment(double);
-        void setTotalAmountPaid(double);
-        double getPresentValue();
-        double getFutureValue();
-        double getInterestRate();
-        int getNumberOfMonths();
-        double getMonthlyPayment();
-        double getTotalAmountPaid();
-        void calculateFutureValue();
-        void calculatePresentValue();
-        void calculateNumberOfMonths();
-        void calculateInterestRate();
-        void calculateMonthlyPayment();
-        void calculateTotalAmountPaid();
-        void displayMenu();
-        void displayResults();
-};
+
 
 // constructor
 financialCalculator::financialCalculator()
@@ -192,16 +161,6 @@ void financialCalculator::displayResults()
     cout << "Total Amount Paid: $" << totalAmountPaid << endl;
 }
 
-
-
-/* TODO
-* 1. Edit main()
-* 2. Test the class
-* 3. Transfer to a header file
-* 4. Test again
-* 5. Convert to wasm
-*/
-
 // main function to test the class
 int main()
 {
@@ -223,7 +182,7 @@ int main()
         {
             case 1:
                 cout << "Enter the present value: "; cin >> prv;
-                calculator.setPresentValue(prv); prv = 0.0;
+                calculator.setPresentValue(prv);
                 cout << "Enter the interest rate: "; cin >> prv;
                 calculator.setInterestRate(prv);
                 cout << "Enter the number of months: "; cin >> prv;
@@ -241,46 +200,46 @@ int main()
                 calculator.calculatePresentValue();
                 calculator.displayResults();
                 break;
-            // case 3:
-            //     cout << "Enter the future value: ";
-            //     cin >> calculator.futureValue;
-            //     cout << "Enter the present value: ";
-            //     cin >> calculator.presentValue;
-            //     cout << "Enter the interest rate: ";
-            //     cin >> calculator.interestRate;
-            //     calculator.calculateNumberOfMonths();
-            //     calculator.displayResults();
-            //     break;
-            // case 4:
-            //     cout << "Enter the future value: ";
-            //     cin >> calculator.futureValue;
-            //     cout << "Enter the present value: ";
-            //     cin >> calculator.presentValue;
-            //     cout << "Enter the number of months: ";
-            //     cin >> calculator.numberOfMonths;
-            //     calculator.calculateInterestRate();
-            //     calculator.displayResults();
-            //     break;
-            // case 5:
-            //     cout << "Enter the present value: ";
-            //     cin >> calculator.presentValue;
-            //     cout << "Enter the interest rate: ";
-            //     cin >> calculator.interestRate;
-            //     cout << "Enter the number of months: ";
-            //     cin >> calculator.numberOfMonths;
-            //     calculator.calculateMonthlyPayment();
-            //     calculator.displayResults();
-            //     break;
-            // case 6:
-            //     cout << "Enter the present value: ";
-            //     cin >> calculator.presentValue;
-            //     cout << "Enter the interest rate: ";
-            //     cin >> calculator.interestRate;
-            //     cout << "Enter the number of months: ";
-            //     cin >> calculator.numberOfMonths;
-            //     calculator.calculateTotalAmountPaid();
-            //     calculator.displayResults();
-            //     break;
+            case 3:
+                cout << "Enter the future value: "; cin >> prv;
+                calculator.setFutureValue(prv);
+                cout << "Enter the present value: "; cin >> prv;
+                calculator.setPresentValue(prv);
+                cout << "Enter the interest rate: "; cin >> prv;
+                calculator.setInterestRate(prv);
+                calculator.calculateNumberOfMonths();
+                calculator.displayResults();
+                break;
+            case 4:
+                cout << "Enter the future value: "; cin >> prv;
+                calculator.setFutureValue(prv);
+                cout << "Enter the present value: "; cin >> prv;
+                calculator.setPresentValue(prv);
+                cout << "Enter the number of months: "; cin >> prv;
+                calculator.setNumberOfMonths(int(prv));
+                calculator.calculateInterestRate();
+                calculator.displayResults();
+                break;
+            case 5:
+                cout << "Enter the present value: "; cin >> prv;
+                calculator.setPresentValue(prv);
+                cout << "Enter the interest rate: "; cin >> prv;
+                calculator.setInterestRate(prv);
+                cout << "Enter the number of months: "; cin >> prv;
+                calculator.setNumberOfMonths(int(prv));
+                calculator.calculateMonthlyPayment();
+                calculator.displayResults();
+                break;
+            case 6:
+                cout << "Enter the present value: "; cin >> prv;
+                calculator.setPresentValue(prv);
+                cout << "Enter the interest rate: "; cin >> prv;
+                calculator.setInterestRate(prv);
+                cout << "Enter the number of months: "; cin >> prv;
+                calculator.setNumberOfMonths(int(prv));
+                calculator.calculateTotalAmountPaid();
+                calculator.displayResults();
+                break;
                 case 7:
                 cout << "Thank you for using the financial calculator." << endl;
                 break;                
