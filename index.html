@@ -7,20 +7,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EXPRESSION CALCULATOR</title>
     <link href="./styles.css" rel="stylesheet" />
-    <script src="./script.js" defer></script>
+    <!-- <script type="module" src="./drawCanvas.js" defer></script> -->
+    <script type="module" src="./main.js"></script>
 </head>
 
-<body>
+<body>    
     <div class="grid">
+        <canvas id="canvas"></canvas>
         <div class="topleft">
-            <div data-financ1 class="top-financ">Present Value: </div>
-            <div data-financ2 class="top-financ">Future Value: </div>
-            <div data-financ3 class="top-financ">Month payment: </div>
+            <div data-financ1 class="top-financ">PV: </div>
+            <div data-financ2 class="top-financ">FV: </div>
+            <div data-financ3 class="top-financ">MP: </div>
         </div>
         <div class="topright">
-            <div data-financ1 class="top-financ">Rate: </div>
-            <div data-financ2 class="top-financ">Period: </div>
-            <div data-financ3 class="top-financ">Installments: </div>
+            <div data-financ1 class="top-financ">R: </div>
+            <div data-financ2 class="top-financ">P: </div>
+            <div data-financ3 class="top-financ">I: </div>
         </div>
         <div class="top">
             <div data-expression class="top-expression"></div>

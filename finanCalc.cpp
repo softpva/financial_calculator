@@ -3,51 +3,72 @@
 
 using namespace std;
 
-class FinanCalc {
-    private:
-        double PV;
-        double r;
-        double n;
-        double FV;
-        double monthly_payment;
+class FinanCalc
+{
+private:
+    double pv;
+    double r;
+    double n;
+    double fv;
+    double mp;
 
-    public:
-        FinanCalc(double PV, double r, double n) {
-            this->PV = PV;
-            this->r = r;
-            this->n = n;
-        }
+public:
+    FinanCalc(double PV, double r, double n, double FV, double mp)
+    {
+        this->pv = PV;
+        this->r = r;
+        this->n = n;
+        this->fv = 0;
+        this->mp = 0;
+    }
 
-        void setPV(double PV) {
-            this->PV = PV;
-        }
+    FinanCalc()
+    {
+        this->pv = 0;
+        this->r = 0;
+        this->n = 0;
+        this->fv = 0;
+        this->mp = 0;
+    }
 
-        void setR(double r) {
-            this->r = r;
-        }
+    void setPV(double PV)
+    {
+        this->pv = PV;
+    }
 
-        void setN(double n) {
-            this->n = n;
-        }
+    void setR(double r)
+    {
+        this->r = r;
+    }
 
-        double getFV() {
-            FV = PV * pow(1 + r, n);
-            return FV;
-        }
+    void setN(double n)
+    {
+        this->n = n;
+    }
 
-        double getPV() {
-            PV = FV / pow(1 + r, n);
-            return PV;
-        }
+    double getFV()
+    {
+        fv = pv * pow(1 + r, n);
+        return fv;
+    }
 
-        double getMonthlyPayment() {
-            monthly_payment = PV * (r * pow(1 + r, n)) / (pow(1 + r, n) - 1);
-            return monthly_payment;
-        }
+    double getPV()
+    {
+        pv = fv / pow(1 + r, n);
+        return pv;
+    }
+
+    double getMonthlyPayment()
+    {
+        mp = pv * (r * pow(1 + r, n)) / (pow(1 + r, n) - 1);
+        return mp;
+    }
 };
 
-int main() {
-    FinanCalc fc(0, 0, 0);
+int main()
+{
+    // FinanCalc fc(0, 0, 0, 0, 0);
+    FinanCalc fc;
 
     fc.setPV(1000);
     fc.setR(0.05);

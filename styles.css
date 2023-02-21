@@ -8,16 +8,25 @@ body{
     padding: auto;
     margin: auto;
     background: linear-gradient(to right, #007700, #00FF00);
+    
+}
+
+#canvas {
+    background-color:  rgba(255,255,255,.6);
+    width: 600px;
+    height: 150px;    
+    border: 1px solid white;
+    padding: 10px;
 }
 
 .grid{
     display: grid;
     justify-content: center;
-    align-content: center;
+    align-content: center;    
     /* align-items: center; */
     min-height: 100vh;
     grid-template-columns: repeat(6, 100px);
-    grid-template-rows: minmax(80px, auto) minmax(80px, auto) repeat(4, 80px);
+    grid-template-rows: 150px minmax(80px, auto) minmax(80px, auto) repeat(4, 80px);
 }
 
 .grid > button{
@@ -49,6 +58,8 @@ body{
     padding: 5px;
     word-wrap: break-word;
     word-break: break-all;    
+    border-left: 1px solid white;
+    border-right: 1px solid white;
 }
 
 .topright {
@@ -63,6 +74,7 @@ body{
     padding: 5px;
     word-wrap: break-word;
     word-break: break-all;    
+    border-right: 1px solid white;
 }
 
 .top {
@@ -77,6 +89,12 @@ body{
     padding: 5px;
     word-wrap: break-word;
     word-break: break-all;
+    border: 1px solid white;
+}
+
+.top-financ {
+    font-family: monospace;
+    font-size: large;
 }
 
 .top .top-expression {
