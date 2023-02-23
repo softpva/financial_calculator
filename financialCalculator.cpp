@@ -9,8 +9,8 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
-#include <string>
-#include "financialCalculator.h"
+// #include <string>
+#include "financialCalculator.hpp"
 
 using namespace std;
 
