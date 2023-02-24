@@ -107,6 +107,7 @@ void financialCalculator::calculateFutureValue()
 }
 
 // calculate the present value
+// TODO: include monthly payment
 void financialCalculator::calculatePresentValue()
 {
     presentValue = futureValue / pow((1 + interestRate), numberOfMonths);
@@ -136,6 +137,19 @@ void financialCalculator::calculateTotalAmountPaid()
     totalAmountPaid = monthlyPayment * numberOfMonths;
 }
 
+// calculate th number of months to reach the future values
+// TODO: check and ajust this function
+void financialCalculator::calculateNumberOfPayments() 
+{
+    double PV = presentValue;
+    double FV = futureValue;
+    double PMT = monthlyPayment;
+    int n = 0;
+    double r = interestRate / 12.0; // convert annual rate to monthly rate
+    double n = log((FV * r + PMT) / (PMT + PV * r)) / log(1 + r);
+    numberOfMonths = int(n);
+}
+
 // display the menu
 void financialCalculator::displayMenu()
 {
@@ -160,6 +174,24 @@ void financialCalculator::displayResults()
     cout << "Monthly Payment: $" << monthlyPayment << endl;
     cout << "Total Amount Paid: $" << totalAmountPaid << endl;
 }
+
+// double FinancialCalculator::calculateInterestRate(double presentValue, double futureValue, double payment, double numberOfPayments) {
+//     double n = numberOfPayments;
+//     double r = 0.1; // initial guess for the interest rate
+//     double epsilon = 0.00001; // tolerance for the solution
+//     double numerator, denominator, f, df;
+
+//     // Use Newton's method to solve for the interest rate
+//     do {
+//         numerator = (futureValue - presentValue * pow(1 + r, n)) / payment;
+//         denominator = pow(1 + r, n) - 1;
+//         f = numerator / denominator - r;
+//         df = (n * presentValue * pow(1 + r, n - 1)) / pow(payment + presentValue * pow(1 + r, n), 2) - 1;
+//         r = r - f / df;
+//     } while (fabs(f) > epsilon);
+
+//     return r;
+// }
 
 // main function to test the class
 int main()

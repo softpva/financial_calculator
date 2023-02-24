@@ -43,6 +43,7 @@ public:
     void calculateInterestRate();
     void calculateMonthlyPayment();
     void calculateTotalAmountPaid();
+    void calculateNumberOfPayments();
     void displayMenu();
     void displayResults();
 };

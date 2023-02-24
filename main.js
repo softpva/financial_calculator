@@ -16,9 +16,9 @@ class Calculator {
     n_pv = 0.0;
     n_fv = 0.0;
     i_n = 0;
-    pn = 0.0;
-    irn = 0.0;
-    tot = 0.0;
+    n_pn = 0.0;
+    n_irn = 0.0;
+    n_tot = 0.0;
 
 
     constructor() {
@@ -31,7 +31,7 @@ class Calculator {
             this.s_number = '0';
             this.s_expression = '';
         }
-        if (this.s_number[0] === 'T') this.s_number = ''; 
+        if (this.s_number[0] === 'T') this.s_number = '';
         if (this.s_number.includes('.') && num === '.') return;
         if (this.s_number[0] === '0' && this.s_number[1] !== '.') this.s_number = '';
         this.s_number += num;
@@ -46,46 +46,74 @@ class Calculator {
         this.s_number = '0';
         this.show();
     }
-
+    // change to wasm functions
     calc_fin() {
-        // change to wasm functions
-        // case 2
-        if (this.n_pv === 0.0 && this.n_fv > 0.0 && this.i_n >= 0 && this.irn >=0 ) {
-            this.n_pv = this.n_fv / Math.pow((1 + this.irn), this.i_n);
+        // case 2 - works
+        // check the formula below & insert total
+        if (this.n_pv === 0.0 && this.n_fv >= 0.0 && this.i_n >= 0 && this.n_irn >= 0 && this.n_pn >= 0.0) {
+            this.n_pv = (this.n_fv - this.n_pn * (1 + this.n_irn) * ((1 - Math.pow((1 + this.n_irn), this.i_n)) / this.n_irn)) / Math.pow((1 + this.n_irn), this.i_n);
             this.e_pv.innerText = "PV: " + this.round(this.n_pv);
             this.s_number = 'The present value is: ' + this.round(this.n_pv, 5);
+            this.n_tot = this.n_fv + this.n_pn * this.i_n;
+            this.e_tot.innerText = "Total: " + this.round(this.n_tot);
             return;
         }
-        // case 1
-        if (this.n_fv === 0.0 && this.n_pv > 0.0 && this.i_n >= 0 && this.irn >=0 ) {
-            this.n_fv = this.n_pv * Math.pow((1 + this.irn), this.i_n);
+        // case 1 - works
+        // check the formula below & insert total
+        if (this.n_fv === 0.0 && this.n_pv > 0.0 && this.i_n >= 0 && this.n_irn >= 0 && this.n_pn >= 0.0) {
+            this.n_fv = this.n_pv * Math.pow((1 + this.n_irn), this.i_n) + this.n_pn * ((Math.pow((1 + this.n_irn), this.i_n) - 1) / this.n_irn);
             this.e_fv.innerText = "FV: " + this.round(this.n_fv);
             this.s_number = 'The future value is: ' + this.round(this.n_fv, 5);
+            this.n_tot = this.n_pv + this.n_pn * this.i_n;
+            this.e_tot.innerText = "Total: " + this.round(this.n_tot);
             return;
         }
-        // case 3
-        if (this.i_n === 0 && this.n_pv > 0.0 && this.n_fv > 0.0 && this.irn >=0 ) {
-            this.i_n = Math.log(this.n_fv / this.n_pv) / Math.log(1 + this.irn);
-            this.e_n.innerText = "n: " + this.i_n ;
-            this.s_number = 'The number of periods is: ' + Math.floor(this.i_n) ;
+
+        // case 3 - works
+        // check the formula below & insert total
+        if (this.i_n === 0 && this.n_pv > 0.0 && this.n_fv > 0.0 && this.n_irn >= 0 && this.n_pn >= 0.0) {
+            this.i_n = Math.log((this.n_fv * this.n_irn + this.n_pn) / (this.n_pn + this.n_pv * this.n_irn)) / Math.log(1 + this.n_irn);
+            this.e_n.innerText = "n: " + this.i_n;
+            this.s_number = 'The number of periods is approximately: ' + Math.floor(this.i_n);
+            this.n_tot = this.n_pv + this.n_pn * this.i_n;
+            this.e_tot.innerText = "Total: " + this.round(this.n_tot);
             return;
         }
-        // case 4
-        if (this.irn === 0.0 && this.n_pv > 0.0 && this.n_fv > 0.0 && this.i_n >= 0) {
-            this.irn = Math.pow((this.n_fv / this.n_pv), (1 / this.i_n)) - 1;
-            this.e_irn.innerText = "IR/n: " + this.round(this.irn);
-            this.s_number = 'The interest rate is: ' + this.round(this.irn * 100, 5) +' % / period.';
+
+        // case 4  
+        // FIXME - the formula below is wrong
+        if (this.n_irn === 0.0 && this.n_pv > 0.0 && this.n_fv > 0.0 && this.i_n >= 0) {
+            let numerator = (this.n_fv - this.n_pv * Math.pow(1 + this.n_irn, this.i_n)) / this.n_pn;
+            let denominator = Math.pow(1 + this.n_irn, this.i_n) - 1;
+            console.log(numerator, denominator);
+            denominator != 0.0 ? this.n_irn = Math.pow(numerator / denominator, 1 / this.i_n) - 1 : this.n_irn = 0;
+
+            // const numerator = (futureValue - presentValue * Math.pow(1 + r, n)) / payment;
+            // const denominator = Math.pow(1 + r, n) - 1;
+            // const r = Math.pow(numerator / denominator, 1 / n) - 1;
+
+            // this.n_irn = Math.pow((this.n_fv / this.n_pv), (1 / this.i_n)) - 1;
+            this.e_irn.innerText = "IR/n: " + this.round(this.n_irn);
+            this.s_number = 'The interest rate is: ' + this.round(this.n_irn * 100, 5) + ' % / period.';
+            this.n_tot = this.n_pv + this.n_pn * this.i_n;
+            this.e_tot.innerText = "Total: " + this.round(this.n_tot);
             return;
         }
-        // case 5 (js= wrong)
-        if (this.pn === 0.0) {
-            this.pn = this.n_pv * this.irn;
-            this.e_pn.innerText = "P/n: " + this.pn;
+        // case 5
+        if (this.n_pv > 0.0 && this.n_fv === 0.0 && this.i_n > 0 && this.n_irn >= 0 && this.n_pn === 0.0) {
+            this.n_pn = this.n_pv * this.n_irn;
+            this.e_pn.innerText = "P/n: " + this.n_pn;
+            this.s_number = 'The payment per period is: ' + this.round(this.n_pn, 5);
+            return;
+        }
+        if (this.n_pn === 0.0) {
+            this.n_pn = this.n_pv * this.n_irn;
+            this.e_pn.innerText = "P/n: " + this.n_pn;
         }
         // case 6
         // this.tot = this.n_pv + this.pn * this.i_n;
         // this.e_tot.innerText = "Total: " + this.tot;
-        
+
     }
 
 
@@ -102,7 +130,7 @@ class Calculator {
         this.s_expression += '= ';
     }
 
-    round(s_num, prec = 15){
+    round(s_num, prec = 15) {
         return parseFloat(parseFloat(s_num).toPrecision(prec)).toString();
     }
 
@@ -131,14 +159,14 @@ class Calculator {
             this.e_n.innerText = "n: " + this.i_n;
         }
         if (inner === 'IR/n') {
-            this.irn = parseFloat(this.s_number);
+            this.n_irn = parseFloat(this.s_number);
             this.s_number = '0';
-            this.e_irn.innerText = "IR/n: " + this.irn;
+            this.e_irn.innerText = "IR/n: " + this.n_irn;
         }
         if (inner === 'P/n') {
-            this.pn = parseFloat(this.s_number);
+            this.n_pn = parseFloat(this.s_number);
             this.s_number = '0';
-            this.e_pn.innerText = "P/n: " + this.pn;
+            this.e_pn.innerText = "P/n: " + this.n_pn;
         }
         this.show();
     }
@@ -152,18 +180,18 @@ class Calculator {
     clearAll() {
         this.s_expression = '';
         this.s_number = '0';
-        this.e_pv.innerText= 'PV:';
-        this.e_fv.innerText= 'FV:';
-        this.e_n.innerText= 'n:';
-        this.e_irn.innerText= 'IR/n:';
-        this.e_pn.innerText= 'P/n:';
-        this.e_tot.innerText= 'Total:';
+        this.e_pv.innerText = 'PV:';
+        this.e_fv.innerText = 'FV:';
+        this.e_n.innerText = 'n:';
+        this.e_irn.innerText = 'IR/n:';
+        this.e_pn.innerText = 'P/n:';
+        this.e_tot.innerText = 'Total:';
         this.n_pv = 0.0;
         this.n_fv = 0.0;
         this.i_n = 0;
-        this.irn = 0.0;
-        this.pn = 0.0;
-        this.tot = 0.0;
+        this.n_irn = 0.0;
+        this.n_pn = 0.0;
+        this.n_tot = 0.0;
         return;
     }
 
@@ -207,7 +235,7 @@ class Calculator {
 }
 
 var canvas = document.getElementById("canvas");
-var data = [100,50,50,50,50,50,50,50,50,50,150];
+var data = [100, 50, 50, 50, 50, 50, 50, 50, 50, 50, 150];
 draw(canvas, data);
 // dcs(canvas, data);
 
