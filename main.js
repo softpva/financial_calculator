@@ -46,64 +46,87 @@ class Calculator {
         this.s_number = '0';
         this.show();
     }
-    // change to wasm functions
+
+    #calculatePresentValue() {
+        this.n_pv = (this.n_fv - this.n_pn * (1 + this.n_irn) * ((1 - Math.pow((1 + this.n_irn), this.i_n)) / this.n_irn)) / Math.pow((1 + this.n_irn), this.i_n);
+        this.e_pv.innerText = "PV: " + this.round(this.n_pv);
+        this.s_number = 'The present value is: ' + this.round(this.n_pv, 5);
+        this.n_tot = this.n_fv + this.n_pn * this.i_n;
+        this.e_tot.innerText = "Total: " + this.round(this.n_tot);
+    }
+
+    #calculateFutureValue() {
+        this.n_fv = this.n_pv * Math.pow((1 + this.n_irn), this.i_n) + this.n_pn * ((Math.pow((1 + this.n_irn), this.i_n) - 1) / this.n_irn);
+        this.e_fv.innerText = "FV: " + this.round(this.n_fv);
+        this.s_number = 'The future value is: ' + this.round(this.n_fv, 5);
+        this.n_tot = this.n_pv + this.n_pn * this.i_n;
+        this.e_tot.innerText = "Total: " + this.round(this.n_tot);
+    }
+
+    #calculateNumberOfPeriods() {
+        this.i_n = Math.log((this.n_fv * this.n_irn + this.n_pn) / (this.n_pn + this.n_pv * this.n_irn)) / Math.log(1 + this.n_irn);
+        this.e_n.innerText = "n: " + this.i_n;
+        this.s_number = 'The number of periods is approximately: ' + Math.floor(this.i_n);
+        this.n_tot = this.n_pv + this.n_pn * this.i_n;
+        this.e_tot.innerText = "Total: " + this.round(this.n_tot);
+    }
+
+    #calculateInterestRate() {
+        let low = 0.0;
+        let high = 1.0;
+        let r = (low + high) / 2;
+        const tolerance = 0.000001;
+        while (Math.abs(this.n_fv - this.n_pv * Math.pow((1 + r), this.i_n) - this.n_pn * ((Math.pow((1 + r), this.i_n) - 1) / r)) > tolerance) {
+            if (this.n_fv > this.n_pv * Math.pow((1 + r), this.i_n) + this.n_pn * ((Math.pow((1 + r), this.i_n) - 1) / r)) {
+                low = r;
+            } else {
+                high = r;
+            }
+            r = (low + high) / 2;
+        }
+        this.n_irn = r;
+        this.e_irn.innerText = "IR/n: " + this.round(this.n_irn);
+        this.s_number = 'The interest rate is: ' + this.round(this.n_irn * 100, 5) + ' % / period.';
+        this.n_tot = this.n_pv + this.n_pn * this.i_n;
+        this.e_tot.innerText = "Total: " + this.round(this.n_tot);
+        return;
+    }
+
+    // check the calculation of the payment per period
+    #calculatePayPerPeriod() {
+        this.n_pn = (this.n_fv - this.n_pv * Math.pow((1 + this.n_irn), this.i_n)) / ((1 + this.n_irn) * ((1 - Math.pow((1 + this.n_irn), this.i_n)) / this.n_irn));
+        this.e_pn.innerText = "P/n: " + this.n_pn;
+        this.s_number = 'The payment per period is: ' + this.round(this.n_pn, 5);
+    }
+
+
+    // Cases:
+    // 0 - members: n, irn, pv, fv, pn 
+    // 1 - input: n, irn, pv/pn output: fv
+    // 2 - input: n, irn, fv/pn output: pv
+    // 3 - input: irn, pv/pn, fv output: n
+    // 4 - input: n, pv/pn, fv output: irn
+    // 5 - input: n, irn, pv, fv output: pn
+    // TODO: check if the inputs are valid if not return, control the ambiguity of the output  
     calc_fin() {
-        // case 2 - works
-        // check the formula below & insert total
-        if (this.n_pv === 0.0 && this.n_fv >= 0.0 && this.i_n >= 0 && this.n_irn >= 0 && this.n_pn >= 0.0) {
-            this.n_pv = (this.n_fv - this.n_pn * (1 + this.n_irn) * ((1 - Math.pow((1 + this.n_irn), this.i_n)) / this.n_irn)) / Math.pow((1 + this.n_irn), this.i_n);
-            this.e_pv.innerText = "PV: " + this.round(this.n_pv);
-            this.s_number = 'The present value is: ' + this.round(this.n_pv, 5);
-            this.n_tot = this.n_fv + this.n_pn * this.i_n;
-            this.e_tot.innerText = "Total: " + this.round(this.n_tot);
-            return;
-        }
-        // case 1 - works
-        // check the formula below & insert total
         if (this.n_fv === 0.0 && this.n_pv > 0.0 && this.i_n >= 0 && this.n_irn >= 0 && this.n_pn >= 0.0) {
-            this.n_fv = this.n_pv * Math.pow((1 + this.n_irn), this.i_n) + this.n_pn * ((Math.pow((1 + this.n_irn), this.i_n) - 1) / this.n_irn);
-            this.e_fv.innerText = "FV: " + this.round(this.n_fv);
-            this.s_number = 'The future value is: ' + this.round(this.n_fv, 5);
-            this.n_tot = this.n_pv + this.n_pn * this.i_n;
-            this.e_tot.innerText = "Total: " + this.round(this.n_tot);
+            this.#calculateFutureValue();
             return;
         }
-
-        // case 3 - works
-        // check the formula below & insert total
+        if (this.n_pv === 0.0 && this.n_fv >= 0.0 && this.i_n >= 0 && this.n_irn >= 0 && this.n_pn >= 0.0) {
+            this.#calculatePresentValue();
+            return;
+        }
         if (this.i_n === 0 && this.n_pv > 0.0 && this.n_fv > 0.0 && this.n_irn >= 0 && this.n_pn >= 0.0) {
-            this.i_n = Math.log((this.n_fv * this.n_irn + this.n_pn) / (this.n_pn + this.n_pv * this.n_irn)) / Math.log(1 + this.n_irn);
-            this.e_n.innerText = "n: " + this.i_n;
-            this.s_number = 'The number of periods is approximately: ' + Math.floor(this.i_n);
-            this.n_tot = this.n_pv + this.n_pn * this.i_n;
-            this.e_tot.innerText = "Total: " + this.round(this.n_tot);
+            this.#calculateNumberOfPeriods();
             return;
         }
-
-        // case 4  
-        // FIXME - the formula below is wrong
         if (this.n_irn === 0.0 && this.n_pv > 0.0 && this.n_fv > 0.0 && this.i_n >= 0) {
-            let numerator = (this.n_fv - this.n_pv * Math.pow(1 + this.n_irn, this.i_n)) / this.n_pn;
-            let denominator = Math.pow(1 + this.n_irn, this.i_n) - 1;
-            console.log(numerator, denominator);
-            denominator != 0.0 ? this.n_irn = Math.pow(numerator / denominator, 1 / this.i_n) - 1 : this.n_irn = 0;
-
-            // const numerator = (futureValue - presentValue * Math.pow(1 + r, n)) / payment;
-            // const denominator = Math.pow(1 + r, n) - 1;
-            // const r = Math.pow(numerator / denominator, 1 / n) - 1;
-
-            // this.n_irn = Math.pow((this.n_fv / this.n_pv), (1 / this.i_n)) - 1;
-            this.e_irn.innerText = "IR/n: " + this.round(this.n_irn);
-            this.s_number = 'The interest rate is: ' + this.round(this.n_irn * 100, 5) + ' % / period.';
-            this.n_tot = this.n_pv + this.n_pn * this.i_n;
-            this.e_tot.innerText = "Total: " + this.round(this.n_tot);
+            this.#calculateInterestRate();
             return;
         }
-        // case 5
-        if (this.n_pv > 0.0 && this.n_fv === 0.0 && this.i_n > 0 && this.n_irn >= 0 && this.n_pn === 0.0) {
-            this.n_pn = this.n_pv * this.n_irn;
-            this.e_pn.innerText = "P/n: " + this.n_pn;
-            this.s_number = 'The payment per period is: ' + this.round(this.n_pn, 5);
+        if (this.n_pv >= 0.0 && this.n_fv >= 0.0 && this.i_n > 0 && this.n_irn >= 0 && this.n_pn === 0.0) {
+            this.#calculatePayPerPeriod(); // chk
             return;
         }
         if (this.n_pn === 0.0) {
