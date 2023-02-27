@@ -1,8 +1,9 @@
 // Draw a coordinate system on the canvas element
 // Receive the canvas element as a parameter and a array of float data 
 // The array of float data is the data to be drawn on abssis
-export default function draw(canvas, data) {
+export default function draw(canvas,data) {
     // Get the 2D context for the canvas
+    
     var ctx = canvas.getContext("2d");
     var hFont = 15;
 
