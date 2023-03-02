@@ -8,7 +8,8 @@ import draw from "./draw.js";
     // 3 - input: irn, pv/pn, fv output: n
     // 4 - input: n, pv/pn, fv output: irn
     // 5 - input: n, irn, pv, fv output: pn
-    // TODO: check if the inputs are valid and consistent values, embebed draw.js in this class, insert alerts?, used toFixed() or toPrecision() and eliminate the round() method?
+    // TEST: test with simple data
+    // TODO: check if the inputs are valid and consistent values, embebed draw.js in this class, insert alerts?, used toFixed() or toPrecision() and eliminate the round() method?, create a new js project and copy this file and ajust other, Change the layout to 8 columns to expand canvas horizontally and vertically? (4x6=24 -> 3x8=24)
 
 
 class Calculator {
@@ -176,7 +177,7 @@ class Calculator {
     }
 
     draw_canvas() {
-        if (this.i_n > 0) {
+        if (this.i_n > 0) {            
             let canvas = document.getElementById("canvas");
             let data = [Math.round(this.n_pv)];
             for (let i = 0; i < this.i_n - 1; i++)
