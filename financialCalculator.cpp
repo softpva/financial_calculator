@@ -25,7 +25,7 @@ financialCalculator::financialCalculator()
     interestRate = 0.0;
     numberOfMonths = 0;
     monthlyPayment = 0.0;
-    totalAmountPaid = 0.0;
+    totalMontlhyPaid = 0.0;
 }
 
 // set the present value
@@ -61,7 +61,7 @@ void financialCalculator::setMonthlyPayment(double m)
 // set the total amount paid
 void financialCalculator::setTotalAmountPaid(double t)
 {
-    totalAmountPaid = t;
+    totalMontlhyPaid = t;
 }
 
 // get the present value
@@ -97,7 +97,7 @@ double financialCalculator::getMonthlyPayment()
 // get the total amount paid
 double financialCalculator::getTotalAmountPaid()
 {
-    return totalAmountPaid;
+    return totalMontlhyPaid;
 }
 
 // calculate the future value
@@ -134,7 +134,7 @@ void financialCalculator::calculateMonthlyPayment()
 // calculate the total amount paid
 void financialCalculator::calculateTotalAmountPaid()
 {
-    totalAmountPaid = monthlyPayment * numberOfMonths;
+    totalMontlhyPaid = monthlyPayment * numberOfMonths;
 }
 
 // calculate th number of months to reach the future values
@@ -172,7 +172,7 @@ void financialCalculator::displayResults()
     cout << "Interest Rate: " << interestRate * 100 << "%" << endl;
     cout << "Number of Months: " << numberOfMonths << endl;
     cout << "Monthly Payment: $" << monthlyPayment << endl;
-    cout << "Total Amount Paid: $" << totalAmountPaid << endl;
+    cout << "Total Amount Paid: $" << totalMontlhyPaid << endl;
 }
 
 // double FinancialCalculator::calculateInterestRate(double presentValue, double futureValue, double payment, double numberOfPayments) {
@@ -205,9 +205,9 @@ int main()
         calculator.displayMenu();
         cout << "Enter your choice: ";
         cin >> choice;
-        while (choice < 1 || choice > 7)
+        while (choice < 0 || choice > 6)
         {
-            cout << "Error! Please enter a number between 1 or 7 : ";
+            cout << "Error! Please enter a number between 1 or 6 (0 to exit) : ";
             cin >> choice;
         }
         switch (choice)
@@ -276,7 +276,7 @@ int main()
                 cout << "Thank you for using the financial calculator." << endl;
                 break;                
         }
-    } while (choice != 7);
+    } while (choice);
     return 0;
 }
 

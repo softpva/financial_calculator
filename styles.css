@@ -7,14 +7,14 @@
 body{
     padding: auto;
     margin: auto;
-    background: linear-gradient(to right, #007700, #00FF00);
+    background: linear-gradient(to right, #771100, #FF1100);
     
 }
 
 #canvas {
     background-color:  rgba(255,255,255,.6);
-    width: 600px;
-    height: 150px;    
+    width: 800px;
+    height: 200px;    
     border: 1px solid white;
     padding: 10px;
 }
@@ -25,8 +25,8 @@ body{
     align-content: center;    
     /* align-items: center; */
     min-height: 100vh;
-    grid-template-columns: repeat(6, 100px);
-    grid-template-rows: 150px minmax(80px, auto) minmax(80px, auto) repeat(4, 80px);
+    grid-template-columns: repeat(8, 100px);
+    grid-template-rows: 200px minmax(80px, auto) minmax(80px, auto) repeat(3, 80px);
 }
 
 .grid > button{
@@ -47,7 +47,7 @@ body{
 }
 
 .topleft {
-    grid-column: 1 / 4;
+    grid-column: 1 / 5;
     background-color: rgba(0,0,0,.8);
     color: #FFFFFF;
     display: flex;
@@ -63,7 +63,7 @@ body{
 }
 
 .topright {
-    grid-column: 4 / -1;
+    grid-column: 5 / -1;
     background-color: rgba(0,0,0,.8);
     color: #FFFFFF;
     display: flex;

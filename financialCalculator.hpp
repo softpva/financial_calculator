@@ -11,6 +11,8 @@
  * 8. Make the md files.
  */
 
+// TODO: refactor totalAmountPaid to totalMontlhyPaid
+
 #pragma once
 
 class financialCalculator
@@ -21,7 +23,7 @@ private:
     double interestRate;
     int numberOfMonths;
     double monthlyPayment;
-    double totalAmountPaid;
+    double totalMontlhyPaid;
 
 public:
     financialCalculator(); // constructor
