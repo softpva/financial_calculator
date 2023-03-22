@@ -15,11 +15,8 @@
 using namespace std;
 
 
-
-// constructor
 financialCalculator::financialCalculator()
 {
-    // initialize the variables
     presentValue = 0.0;
     futureValue = 0.0;
     interestRate = 0.0;
@@ -28,89 +25,71 @@ financialCalculator::financialCalculator()
     totalMontlhyPaid = 0.0;
 }
 
-// set the present value
 void financialCalculator::setPresentValue(double p)
 {
     presentValue = p;
 }
 
-// set the future value
 void financialCalculator::setFutureValue(double f)
 {
     futureValue = f;
 }
 
-// set the interest rate
 void financialCalculator::setInterestRate(double i)
 {
     interestRate = i;
 }
 
-// set the number of months
 void financialCalculator::setNumberOfMonths(int n)
 {
     numberOfMonths = n;
 }
 
-// set the monthly payment
 void financialCalculator::setMonthlyPayment(double m)
 {
     monthlyPayment = m;
 }
 
-// set the total amount paid
-void financialCalculator::setTotalAmountPaid(double t)
-{
-    totalMontlhyPaid = t;
-}
 
-// get the present value
 double financialCalculator::getPresentValue()
 {
     return presentValue;
 }
 
-// get the future value
 double financialCalculator::getFutureValue()
 {
     return futureValue;
 }
 
-// get the interest rate
 double financialCalculator::getInterestRate()
 {
     return interestRate;
 }
 
-// get the number of months
 int financialCalculator::getNumberOfMonths()
 {
     return numberOfMonths;
 }
 
-// get the monthly payment
 double financialCalculator::getMonthlyPayment()
 {
     return monthlyPayment;
 }
 
-// get the total amount paid
 double financialCalculator::getTotalAmountPaid()
 {
     return totalMontlhyPaid;
 }
 
-// calculate the future value
 void financialCalculator::calculateFutureValue()
 {
-    futureValue = presentValue * pow((1 + interestRate), numberOfMonths);
+    futureValue = presentValue * pow((1 + interestRate), numberOfMonths) + monthlyPayment * (pow((1 + interestRate), numberOfMonths) - 1) / interestRate;
 }
 
-// calculate the present value
-// TODO: include monthly payment
+// TODO: included monthly payment the formula is different of js one, check it
 void financialCalculator::calculatePresentValue()
 {
-    presentValue = futureValue / pow((1 + interestRate), numberOfMonths);
+    presentValue = futureValue / pow((1 + interestRate), numberOfMonths) + monthlyPayment * (1 - pow((1 + interestRate), -numberOfMonths)) / interestRate;
 }
 
 // calculate the number of months
