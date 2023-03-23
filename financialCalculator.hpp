@@ -42,7 +42,7 @@ public:
     void calculateNumberOfMonths();
     void calculateInterestRate();
     void calculateMonthlyPayment();
-    void calculateTotalAmountPaid();
+    double calculateTotalAmountPaid();
     void calculateNumberOfPayments();
     void displayMenu();
     void displayResults();

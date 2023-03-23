@@ -3,6 +3,7 @@ import draw from "./draw.js";
 
 // TODO;  Eliminate comments
 // TODO: Test aleatory values and conditions to check if the results are correct.
+// TODO: Refactor the code to make it more readable and maintainable by inserting local variables in the methods.
 
 class Calculator {
     e_expression = document.querySelector("[data-expression]");

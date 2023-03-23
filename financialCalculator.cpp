@@ -36,7 +36,10 @@ void financialCalculator::setFutureValue(double f)
 
 void financialCalculator::setInterestRate(double i)
 {
-    interestRate = i;
+    if (i > 1)
+        interestRate = i / 100;
+    else
+        interestRate = i;
 }
 
 void financialCalculator::setNumberOfMonths(int n)
@@ -91,78 +94,77 @@ void financialCalculator::calculatePresentValue()
 // tested ok
 void financialCalculator::calculateNumberOfMonths()
 {
-    double PV = presentValue;
-    double FV = futureValue;
-    double PMT = monthlyPayment;
+    double pv = presentValue;
+    double fv = futureValue;
+    double pmt = monthlyPayment;
     double n = 0;
     double r = interestRate;
-    n = log((FV * r + PMT) / (PMT + PV * r)) / log(1 + r);
+    n = log((fv * r + pmt) / (pmt + pv * r)) / log(1 + r);
     numberOfMonths = int(round(n));
 }
 
-// TODO: test this method
-//  calculate the interest rate using the present value and the future value and the number of months and the monthly payment
+// tested ok
 void financialCalculator::calculateInterestRate()
 {
-    double PV = presentValue;
-    double FV = futureValue;
-    double PMT = monthlyPayment;
+    double pv = presentValue;
+    double fv = futureValue;
+    double pmt = monthlyPayment;
     double n = numberOfMonths;
     double r = 0;
-    // if there is no monthly payment
-    // tested ok
-    if (PMT == 0)
+    double increment = 0.0001;
+    double calc;
+    if (pmt == 0 && pv > 0 && n > 0 && fv > 0)
     {
-        r = pow((FV / PV), (1.0 / n)) - 1;
+        r = pow((fv / pv), (1.0 / n)) - 1;
         interestRate = r;
         return;
     }
-    //TODO: build the cases above
-    // if there is no present value 
-    if (PV == 0)
+    if (fv == 0 && pv > 0 && n > 0 && pmt > 0)
     {
-
-        
+        calc = pmt * n;
+        while (calc > pv)
+        {
+            r += increment;
+            calc = pmt * (1 - pow((1 + r), -n)) / r;
+        }
         interestRate = r;
         return;
     }
-    // if there is no future value
-    // doesn't work
-    if (FV == 0)
+    if (pv == 0 && fv > 0 && n > 0 && pmt > 0)
     {
-        
+        calc = pmt * n;
+        while (calc < fv)
+        {
+            r += increment;
+            calc = pmt * (pow((1 + r), n) - 1) / r;
+        }
         interestRate = r;
         return;
     }
 }
 
-// void financialCalculator::calculateInterestRate()
-// {
-//     interestRate = pow((futureValue / presentValue), (1.0 / numberOfMonths)) - 1;
-// }
-
-// calculate the monthly payment
 void financialCalculator::calculateMonthlyPayment()
 {
     monthlyPayment = presentValue * interestRate / (1 - pow((1 + interestRate), -numberOfMonths));
 }
 
 // calculate the total amount paid
-void financialCalculator::calculateTotalAmountPaid()
+double financialCalculator::calculateTotalAmountPaid()
 {
     totalMontlhyPaid = monthlyPayment * numberOfMonths;
+    return totalMontlhyPaid;
 }
 
 // calculate th number of months to reach the future values
 // TODO: check and ajust this function
 void financialCalculator::calculateNumberOfPayments()
 {
-    double PV = presentValue;
-    double FV = futureValue;
-    double PMT = monthlyPayment;
+    double pv = presentValue;
+    double fv = futureValue;
+    double pmt = monthlyPayment;
     double n = 0;
     double r = interestRate / 12.0; // convert annual rate to monthly rate
-    n = log((FV * r + PMT) / (PMT + PV * r)) / log(1 + r);
+    n = log((fv * r + pmt) / (pmt + pv * r)) / log(1 + r);
     numberOfMonths = int(n);
 }
 
@@ -172,11 +174,11 @@ void financialCalculator::displayMenu()
     cout << "Financial Calculator" << endl;
     cout << "1. Calculate the future value of an investment" << endl;
     cout << "2. Calculate the present value of an investment" << endl;
-    cout << "3. Calculate the number of months to reach a certain amount" << endl;
-    cout << "4. Calculate the interest rate, knowing the present value and monthly payments " << endl;
-    cout << "5. Calculate the interest rate, knowing the present value and future value " << endl;
-    cout << "6. Calculate the interest rate, knowing the future value and monthly payments " << endl;
-    cout << "7. Calculate the monthly payment needed to pay off a loan in a certain number of years" << endl;
+    cout << "3. Calculate approximately the number of periods to reach a certain amount" << endl;
+    cout << "4. Calculate the interest rate, known the present value and monthly payments " << endl;
+    cout << "5. Calculate the interest rate, known the present value and future value " << endl;
+    cout << "6. Calculate the interest rate, known the future value and payments per period" << endl;
+    cout << "7. Calculate the monthly payment needed to pay off a loan in a certain number of periods" << endl;
     cout << "8. Calculate the total amount paid back on a loan" << endl;
     cout << "0. Exit" << endl;
 }
@@ -191,26 +193,9 @@ void financialCalculator::displayResults()
     cout << "Interest Rate: " << interestRate * 100 << "%" << endl;
     cout << "Number of Months: " << numberOfMonths << endl;
     cout << "Monthly Payment: $" << monthlyPayment << endl;
-    cout << "Total Amount Paid Monthly: $" << totalMontlhyPaid << endl;
+    cout << "Total Amount Paid Monthly: $" << calculateTotalAmountPaid() << endl;
 }
 
-// double FinancialCalculator::calculateInterestRate(double presentValue, double futureValue, double payment, double numberOfPayments) {
-//     double n = numberOfPayments;
-//     double r = 0.1; // initial guess for the interest rate
-//     double epsilon = 0.00001; // tolerance for the solution
-//     double numerator, denominator, f, df;
-
-//     // Use Newton's method to solve for the interest rate
-//     do {
-//         numerator = (futureValue - presentValue * pow(1 + r, n)) / payment;
-//         denominator = pow(1 + r, n) - 1;
-//         f = numerator / denominator - r;
-//         df = (n * presentValue * pow(1 + r, n - 1)) / pow(payment + presentValue * pow(1 + r, n), 2) - 1;
-//         r = r - f / df;
-//     } while (fabs(f) > epsilon);
-
-//     return r;
-// }
 
 // main function to test the class
 int main()
@@ -224,9 +209,9 @@ int main()
         calculator.displayMenu();
         cout << "Enter your choice: ";
         cin >> choice;
-        while (choice < 0 || choice > 6)
+        while (choice < 0 || choice > 8)
         {
-            cout << "Error! Please enter a number between 1 or 6 (0 to exit) : ";
+            cout << "Error! Please enter a number between 1 or 8 (0 to exit) : ";
             cin >> choice;
         }
         switch (choice)
