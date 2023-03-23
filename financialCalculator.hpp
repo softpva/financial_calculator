@@ -11,8 +11,6 @@
  * 8. Make the md files.
  */
 
-// TODO: refactor totalAmountPaid to totalMontlhyPaid
-
 #pragma once
 
 class financialCalculator
