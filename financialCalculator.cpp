@@ -28,12 +28,10 @@ void financialCalculator::setPresentValue(double p)
 {
     presentValue = p;
 }
-
 void financialCalculator::setFutureValue(double f)
 {
     futureValue = f;
 }
-
 void financialCalculator::setInterestRate(double i)
 {
     if (i > 1)
@@ -41,7 +39,6 @@ void financialCalculator::setInterestRate(double i)
     else
         interestRate = i;
 }
-
 void financialCalculator::setNumberOfMonths(int n)
 {
     numberOfMonths = n;
@@ -81,17 +78,17 @@ double financialCalculator::getTotalAmountPaid()
 {
     return totalMontlhyPaid;
 }
-// tested ok
+
 void financialCalculator::calculateFutureValue()
 {
     futureValue = presentValue * pow((1 + interestRate), numberOfMonths) + monthlyPayment * (pow((1 + interestRate), numberOfMonths) - 1) / interestRate;
 }
-// tested ok
+
 void financialCalculator::calculatePresentValue()
 {
     presentValue = futureValue / pow((1 + interestRate), numberOfMonths) + monthlyPayment * (1 - pow((1 + interestRate), -numberOfMonths)) / interestRate;
 }
-// tested ok
+
 void financialCalculator::calculateNumberOfMonths()
 {
     double pv = presentValue;
@@ -103,7 +100,6 @@ void financialCalculator::calculateNumberOfMonths()
     numberOfMonths = int(round(n));
 }
 
-// tested ok
 void financialCalculator::calculateInterestRate()
 {
     double pv = presentValue;
@@ -145,47 +141,53 @@ void financialCalculator::calculateInterestRate()
 
 void financialCalculator::calculateMonthlyPayment()
 {
-    monthlyPayment = presentValue * interestRate / (1 - pow((1 + interestRate), -numberOfMonths));
+    if (presentValue > 0 && futureValue == 0)
+    {
+        monthlyPayment = presentValue * interestRate / (1 - pow((1 + interestRate), -numberOfMonths));
+        return;
+    }
+    if (futureValue > 0 && presentValue == 0)
+    {
+        monthlyPayment = futureValue * interestRate / (pow((1 + interestRate), numberOfMonths) - 1);
+    }
 }
 
-// calculate the total amount paid
-double financialCalculator::calculateTotalAmountPaid()
-{
-    totalMontlhyPaid = monthlyPayment * numberOfMonths;
-    return totalMontlhyPaid;
-}
-
-// calculate th number of months to reach the future values
-// TODO: check and ajust this function
 void financialCalculator::calculateNumberOfPayments()
 {
     double pv = presentValue;
     double fv = futureValue;
     double pmt = monthlyPayment;
     double n = 0;
-    double r = interestRate / 12.0; // convert annual rate to monthly rate
+    double r = interestRate;
     n = log((fv * r + pmt) / (pmt + pv * r)) / log(1 + r);
-    numberOfMonths = int(n);
+    numberOfMonths = int(round(n));
 }
 
-// display the menu
+double financialCalculator::calculateTotalAmountPaid()
+{
+    totalMontlhyPaid = monthlyPayment * numberOfMonths;
+    return totalMontlhyPaid;
+}
+
 void financialCalculator::displayMenu()
 {
+    cout << "-----------------" << endl;
     cout << "Financial Calculator" << endl;
     cout << "1. Calculate the future value of an investment" << endl;
     cout << "2. Calculate the present value of an investment" << endl;
-    cout << "3. Calculate approximately the number of periods to reach a certain amount" << endl;
+    cout << "3. Calculate approximately the number of periods to match a determined situation" << endl;
     cout << "4. Calculate the interest rate, known the present value and monthly payments " << endl;
     cout << "5. Calculate the interest rate, known the present value and future value " << endl;
     cout << "6. Calculate the interest rate, known the future value and payments per period" << endl;
     cout << "7. Calculate the monthly payment needed to pay off a loan in a certain number of periods" << endl;
-    cout << "8. Calculate the total amount paid back on a loan" << endl;
+    cout << "8. Calculate the monthly payment needed to obtain a future reserve" << endl;
     cout << "0. Exit" << endl;
+    cout << "-----------------" << endl;
 }
 
-// display the results
 void financialCalculator::displayResults()
 {
+    char choice;
     cout << "-----------------" << endl;
     cout << fixed << showpoint << setprecision(2);
     cout << "Present Value: $" << presentValue << endl;
@@ -194,10 +196,14 @@ void financialCalculator::displayResults()
     cout << "Number of Months: " << numberOfMonths << endl;
     cout << "Monthly Payment: $" << monthlyPayment << endl;
     cout << "Total Amount Paid Monthly: $" << calculateTotalAmountPaid() << endl;
+    cout << "-----------------" << endl;
+    cout << "Digit any key to continue: ";
+    cin.ignore();
+    cin.get(choice);
+
 }
 
-
-// main function to test the class
+// The main function used to test the class
 int main()
 {
     financialCalculator calculator;
@@ -211,12 +217,14 @@ int main()
         cin >> choice;
         while (choice < 0 || choice > 8)
         {
-            cout << "Error! Please enter a number between 1 or 8 (0 to exit) : ";
+            cout << "Error! Please enter a number between 0 or 8 (0 to exit) : ";
             cin >> choice;
         }
         switch (choice)
         {
         case 1:
+            cout << "Calculate the future value of an investment." << endl;
+            cout << "-----------------" << endl;
             cout << "Enter the present value: ";
             cin >> prv;
             calculator.setPresentValue(prv);
@@ -233,6 +241,8 @@ int main()
             calculator.displayResults();
             break;
         case 2:
+            cout << "Calculate the present value of an investment" << endl;
+            cout << "-----------------" << endl;
             cout << "Enter the future value: ";
             cin >> prv;
             calculator.setFutureValue(prv);
@@ -249,22 +259,26 @@ int main()
             calculator.displayResults();
             break;
         case 3:
-            cout << "Enter the future value: ";
-            cin >> prv;
-            calculator.setFutureValue(prv);
+            cout << "Calculate approximately the number of periods to match a determined situation" << endl;
+            cout << "-----------------" << endl;
             cout << "Enter the present value: ";
             cin >> prv;
             calculator.setPresentValue(prv);
-            cout << "Enter the interest rate: ";
+            cout << "Enter the future value: ";
             cin >> prv;
-            calculator.setInterestRate(prv);
+            calculator.setFutureValue(prv);
             cout << "Enter the monthly payment: ";
             cin >> prv;
             calculator.setMonthlyPayment(prv);
+            cout << "Enter the interest rate: ";
+            cin >> prv;
+            calculator.setInterestRate(prv);
             calculator.calculateNumberOfMonths();
             calculator.displayResults();
             break;
         case 4:
+            cout << "Calculate the interest rate, known the present value and monthly payments " << endl;
+            cout << "-----------------" << endl;
             calculator.setFutureValue(0.0);
             cout << "Enter the present value: ";
             cin >> prv;
@@ -279,6 +293,8 @@ int main()
             calculator.displayResults();
             break;
         case 5:
+            cout << "Calculate the interest rate, known the present value and future value " << endl;
+            cout << "-----------------" << endl;
             calculator.setMonthlyPayment(0.0);
             cout << "Enter the present value: ";
             cin >> prv;
@@ -293,6 +309,8 @@ int main()
             calculator.displayResults();
             break;
         case 6:
+            cout << "Calculate the interest rate, known the future value and payments per period" << endl;
+            cout << "-----------------" << endl;
             calculator.setPresentValue(0.0);
             cout << "Enter the future value: ";
             cin >> prv;
@@ -307,6 +325,8 @@ int main()
             calculator.displayResults();
             break;
         case 7:
+            cout << "Calculate the monthly payment needed to pay off a loan in a certain number of periods" << endl;
+            cout << "-----------------" << endl;
             cout << "Enter the present value: ";
             cin >> prv;
             calculator.setPresentValue(prv);
@@ -320,19 +340,22 @@ int main()
             calculator.displayResults();
             break;
         case 8:
-            cout << "Enter the present value: ";
+            cout << "Calculate the monthly payment needed to obtain a future reserve" << endl;
+            cout << "-----------------" << endl;
+            cout << "Enter the desired future value: ";
             cin >> prv;
-            calculator.setPresentValue(prv);
+            calculator.setFutureValue(prv);
             cout << "Enter the interest rate: ";
             cin >> prv;
             calculator.setInterestRate(prv);
             cout << "Enter the number of months: ";
             cin >> prv;
             calculator.setNumberOfMonths(int(prv));
-            calculator.calculateTotalAmountPaid();
+            calculator.calculateMonthlyPayment();
             calculator.displayResults();
             break;
         case 0:
+            cout << "-----------------" << endl;
             cout << "Thank you for using the financial calculator." << endl;
             break;
         }
