@@ -152,17 +152,6 @@ void financialCalculator::calculateMonthlyPayment()
     }
 }
 
-void financialCalculator::calculateNumberOfPayments()
-{
-    double pv = presentValue;
-    double fv = futureValue;
-    double pmt = monthlyPayment;
-    double n = 0;
-    double r = interestRate;
-    n = log((fv * r + pmt) / (pmt + pv * r)) / log(1 + r);
-    numberOfMonths = int(round(n));
-}
-
 double financialCalculator::calculateTotalAmountPaid()
 {
     totalMontlhyPaid = monthlyPayment * numberOfMonths;
